@@ -103,6 +103,22 @@ Actor **Director** connectat a casos com **02.CrearCurs** (*extension point*: en
 
 Relacions: «prerequisit» de *03* cap a *02*; «extend» de *04* cap a *03* i cap a *05* (condició "professor nou"); «prerequisit» relacionant *05/06* amb els d'assignació/creació.
 
+```mermaid
+flowchart LR
+  Dir["👤 Director"]:::actor
+  subgraph Gestió de cursos
+    C2(["02 · CrearCurs"])
+    C3(["03 · AssignarProfessorCurs"])
+    C4(["04 · CrearProfessor"])
+  end
+  Dir --- C2
+  Dir --- C3
+  Dir --- C4
+  C3 -. "«prerequisit»" .-> C2
+  C4 -. "«extend»" .-> C3
+  classDef actor fill:#ffffff,stroke:#8a1f2b,color:#8a1f2b,stroke-width:1px;
+```
+
 ## Especificació textual dels casos d'ús (I): estructura
 
 Per a cada cd'ú:
@@ -155,6 +171,18 @@ Per a cada cd'ú:
 - **Esforç** (pm) = `A × kL^B` (A = 2.4–3.6, B = 1.05–1.2; kL = milers de línies).
 - **Durada** (mesos) = `C × esforç^D` (C = 2.5, D = 0.32–0.38).
 - **Participants mitjans** = esforç / durada.
+
+```mermaid
+flowchart LR
+  CU["Casos d'ús<br/>(RET · DET)"] --> CX["Complexitat<br/>baixa/mitjana/alta"]
+  CX --> FP["Punts de funció<br/>7 · 10 · 15"]
+  FP --> V["× VAF<br/>(TDI·0,01+0,65)"]
+  V --> L["Línies<br/>(× 55 en Java)"]
+  L --> E["Esforç<br/>(participants/mes)"]
+  E --> D["Durada<br/>(mesos)"]
+  classDef s fill:#fbf4f4,stroke:#8a1f2b,color:#3a1116;
+  class CU,CX,FP,V,L,E,D s;
+```
 
 ## Planificació de requisits: mètode MoSCoW
 

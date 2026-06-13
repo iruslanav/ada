@@ -41,6 +41,20 @@ S'utilitzen **classes de 3 tipus**:
 4. **Diagrama de seqüències per cada cd'ú** que representa les interaccions entre classes de control, frontera i entitat i actors.
 5. (Opcional) **Especificació de les operacions** de les classes.
 
+```mermaid
+flowchart TD
+  P1["1 · Diagrama de<br/>classes d'entitat<br/><i>(sense operacions)</i>"]
+  P2["2 · Diagrama d'activitats<br/>per cada cd'ú"]
+  P3["3 · Diagrama de classes<br/>per cada cd'ú"]
+  P4["4 · Diagrama de<br/>seqüències per cada cd'ú"]
+  P5["5 · Especificació<br/>de les operacions"]
+  P1 --> P2 --> P3 --> P4 --> P5
+  classDef s fill:#f6e9ea,stroke:#8a1f2b,color:#3a1116;
+  class P1,P2,P3,P4,P5 s;
+```
+
+> 🧠 **Els 3 tipus de classe (recorda'ls!):** **Entitat** = les dades persistents (independents del cd'ú) · **Frontera** = les E/S amb l'actor (finestres) · **Control** = el procés del cd'ú (es crea a l'inici i es destrueix al final).
+
 ## 1. El diagrama de les classes d'entitat
 
 - Identificar **atributs**, **tipus de dades** (independents del llenguatge), **propietats** i **derivació d'atributs** a partir dels passos dels cd'ú i les **regles de negoci**.

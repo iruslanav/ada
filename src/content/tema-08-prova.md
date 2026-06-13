@@ -45,6 +45,20 @@ Els entorns de desenvolupament inclouen eines d'ajuda.
 - **Beta test**: amb diversos clients heterogenis (programari per al mercat).
 - **Prova de regressió**: després del manteniment, per comprovar que el codi no modificat continua funcionant.
 
+```mermaid
+flowchart LR
+  U["Unitària<br/><i>cada unitat</i>"] --> I["Integració<br/><i>conjunts d'unitats</i>"]
+  I --> V["Validació<br/><i>req. funcionals</i>"]
+  V --> S["Sistema<br/><i>req. NO funcionals</i>"]
+  S --> A["Acceptació<br/><i>alfa · client</i>"]
+  A --> B["Beta<br/><i>mercat</i>"]
+  B --> R["Regressió<br/><i>post-manteniment</i>"]
+  classDef s fill:#eaf6ee,stroke:#2e9e57,color:#1c5a35;
+  class U,I,V,S,A,B,R s;
+```
+
+> 📌 **Clau:** validació = "té totes les funcions?" · verificació = "les fa bé?" · **caixa blanca** mira l'estructura interna, **caixa negra** només la funcionalitat (classes d'equivalència, valors fronterers, causa-efecte).
+
 **Activitats de cada etapa:** planificació; elaboració dels **casos de prova**; preparació de la infraestructura; realització; revisió de resultats (comparant amb els esperats); depuració.
 
 Un **cas de prova** és l'especificació d'una prova concreta: **identificador, valors d'entrada i resultat correcte esperat**.

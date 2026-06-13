@@ -422,6 +422,46 @@ kbd {
 }
 .btn-known:hover { background: var(--accent-dark); }
 
+/* ---------- Mermaid diagrames ---------- */
+.mermaid-diagram {
+  margin: 22px 0;
+  padding: 18px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow-x: auto;
+  text-align: center;
+}
+.mermaid-diagram svg { max-width: 100%; height: auto; }
+.mermaid-fallback {
+  background: #fff7f7;
+  border: 1px dashed var(--accent);
+  border-radius: 10px;
+  color: var(--accent-dark);
+  padding: 14px;
+  font-size: 13px;
+}
+
+/* ---------- Callouts ---------- */
+.prose .callout {
+  border-left-width: 5px;
+  border-radius: 10px;
+  background: var(--accent-soft-2);
+  border-color: var(--accent);
+  padding: 14px 16px 14px 18px;
+}
+.prose .callout p { margin: 4px 0; }
+.prose .callout-tip   { background: #f6ecee; border-color: #8a1f2b; }
+.prose .callout-goal  { background: #f1ecf7; border-color: #6b4fa3; }
+.prose .callout-note  { background: #eaf2fb; border-color: #2d6cc0; }
+.prose .callout-ok    { background: #eaf6ee; border-color: #2e9e57; }
+.prose .callout-warn  { background: #fdf3e7; border-color: #d98324; }
+.prose .callout-mem   { background: #fdeef4; border-color: #c0397f; }
+
+/* Caixa "en un cop d'ull" (resum visual) */
+.prose .callout-goal strong:first-child { color: #5a3f93; }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 860px) {
   .hamburger { display: block; }

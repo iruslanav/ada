@@ -60,6 +60,49 @@ Diagrama amb capçalera `state machine Ex3S`: estat inicial → estat `w`; de `w
 - **Treball — Professor**: `*` — `1` (a cada treball, 1 professor corrector).
 - **TreballTeoria — Resposta**: `1` — `*`.
 
+```mermaid
+classDiagram
+  class Persona {
+    -String NIF
+    -String nom
+  }
+  class Professor {
+    -int despatx
+  }
+  class Treball {
+    <<abstract>>
+    -String codi
+  }
+  class TreballPractic {
+    -String URL
+    -float qualificacio
+  }
+  class Resposta {
+    -String resposta
+    -Valoracio qualificacio
+  }
+  class Valoracio {
+    <<enumeration>>
+    malament
+    be
+    molt_be
+  }
+  class Entrega {
+    -String NIF
+    -date diaHora
+  }
+  Persona <|-- Alumne
+  Persona <|-- Professor
+  Treball <|-- TreballPractic
+  Treball <|-- TreballTeoria
+  Alumne "1..3" -- "*" Treball : Entrega
+  Professor "1" -- "*" Treball : corregeix
+  TreballTeoria "1" -- "*" Resposta
+  Entrega .. Treball
+```
+
+> 💡 **Claus de la solució:** `Entrega` és **classe associativa** (depèn de la parella alumne–treball) · `Persona` `{incomplete, disjoint}`, `Treball` `{complete, disjoint}` · la qualificació de teoria és un **`«enumeration»`**, la pràctica és `float`.
+
 **Raonament:** el resguard d'entrega depèn de la **parella** (alumne, treball) → classe associativa `Entrega`. `Treball` és abstracta (`{complete}`). Les respostes són classe pròpia (dos camps i quantitat indefinida). La qualificació de teoria és un domini tancat → **enumeració**; la pràctica és `float`.
 
 ### Exercici 3 — Diagrama de casos d'ús
@@ -80,6 +123,17 @@ Diagrama amb capçalera `state machine Ex3S`: estat inicial → estat `w`; de `w
 
 És una **màquina d'estats de submàquina** (ho sabem pels **punts d'entrada `p2` i de sortida `p1`**). De l'inicial es passa a `w`. De `w` se surt amb l'**esdeveniment de canvi `when (xxx)`** cap a un node de decisió: si es compleix la guarda `[e]` → estat `r` (al qual també s'arriba directament pel punt d'entrada `p2`); si no (`[else]`) → es surt per `p1`. De `r` se surt amb l'**esdeveniment de temps relatiu `after (yyyy)`** cap a l'estat final.
 
+```mermaid
+stateDiagram-v2
+  [*] --> w
+  w --> tria : when(xxx)
+  state tria <<choice>>
+  tria --> r : [e]
+  tria --> p1 : [else] (punt de sortida)
+  p2 --> r : punt d'entrada
+  r --> [*] : after(yyyy)
+```
+
 ### Exercici 5 — Diagrama de seqüències
 
 **Línies de vida:** `: Usuari`, `: FinestraCerca`, `: SistemaGestio`, `: BD`, `: Resultat` (creada durant la interacció).
@@ -93,6 +147,22 @@ Diagrama amb capçalera `state machine Ex3S`: estat inicial → estat `w`; de `w
 5. `(llibres)` — SistemaGestio ⇢ **crea** `: Resultat`.
 6. `confirma` — Usuari → `: Resultat`.
 7. missatge reflexiu → `: Resultat` es **destrueix** (X al final de la ldv).
+
+```mermaid
+sequenceDiagram
+  actor U as Usuari
+  participant F as :FinestraCerca
+  participant S as :SistemaGestio
+  participant B as :BD
+  participant R as :Resultat
+  U->>F: titol
+  F->>S: cercaLlibre(titol)
+  S->>B: cercarLlibre(titol)
+  B-->>S: llibres
+  S-->>R: crea(llibres)
+  U->>R: confirma
+  R->>R: tanca (destrucció)
+```
 
 **Raonament:** la finestra de resultats es **crea dinàmicament**; els retorns van amb fletxes discontínues; el tancament es marca amb la **X de destrucció**. Hi ha delegació en capes: presentació → lògica → persistència.
 

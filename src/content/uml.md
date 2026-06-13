@@ -127,6 +127,25 @@ Cada diagrama es representa opcionalment dins d'un **marc amb capçalera** (etiq
 
 **Exemple — `Rectangle`:** `+extrems: Punt [2]` (matriu de 2 Punt), `#gruixLinia: Integer = 1` (protegit, valor inicial 1), `+/area: Real` (derivat), `+getGruixLinia(): Integer {query}`, `+setGruixLinia(nouGruix: Integer, out vellGruix: Integer)`, operació de classe `«constructor» +nouRectangle(...): Rectangle` (subratllada).
 
+```mermaid
+classDiagram
+  class Punt {
+    -Real x
+    -Real y
+    +crear(x, y)
+  }
+  class Rectangle {
+    #Integer gruixLinia
+    +Real area
+    +getGruixLinia() Integer
+    +setGruixLinia(nou, vell)
+    +nouRectangle(e1, e2) Rectangle
+  }
+  Rectangle "1" --> "2" Punt : extrems
+```
+
+> 💡 **Com llegir-ho:** `-` privat, `#` protegit, `+` públic · els **atributs/operacions de classe** van subratllats · `area` és **derivat** (`/`) · les fletxes amb multiplicitat (`2`) són els extrems d'associació.
+
 ### Notació de l'objecte
 
 Com la de la classe; té el compartiment del nom i pot tenir el dels atributs (només d'objecte). Si pertany a estats: després del nom de classe, entre `[ ]`, la llista d'estats. El nom de l'objecte i el de la classe van subratllats. Valors successius en el temps es relacionen amb dependències `becomes`.
@@ -232,6 +251,22 @@ Identifica els comportaments executants d'un classificador de context i especifi
 - **Generalització/especialització/herència**: cas més especialitzat; pot haver-hi **casos d'ús abstractes** (cada execució és la d'algun que l'especialitza). S'usa quan el comportament compartit no és una seqüència de passos consecutius.
 - **Notació**: `«extend»`/`«include»` amb **fletxa discontínua de punta oberta**; punts d'extensió en un compartiment del cas; generalització amb fletxa de punta triangular buida; cas abstracte amb nom en cursiva.
 
+```mermaid
+flowchart LR
+  Comptable["👤 Comptable"]:::actor
+  subgraph Subjecte
+    Ass(["Assentament"])
+    DC(["DadesCompte"])
+    CrC(["CreacioCompte"])
+  end
+  Comptable --- Ass
+  Ass -. "«include»" .-> DC
+  CrC -. "«extend»" .-> Ass
+  classDef actor fill:#ffffff,stroke:#8a1f2b,color:#8a1f2b,stroke-width:1px;
+```
+
+> 📌 **Regla d'or:** `«include»` = comportament **sempre** obligatori i compartit (com una crida). `«extend»` = comportament **condicional** (només en un punt d'extensió). La generalització entre casos s'usa quan el comú **no** és una seqüència de passos consecutius.
+
 ---
 
 ## Diagrama d'estats
@@ -279,6 +314,19 @@ Descriu els comportaments de les instàncies d'un classificador en termes del se
 - **Transició simple**: pas d'un vèrtex d'origen a un de destinació; cal una ocurrència de l'esdeveniment del disparador i, opcionalment, una **guarda**.
 - **Transició interna**: **no comporta canvi d'estat** (≠ **autotransició**, que sí executa els comportaments de sortida i d'entrada).
 - **Notació**: **fletxa de línia contínua i punta oberta** amb etiqueta `disparador [guarda] / comportament`.
+
+```mermaid
+stateDiagram-v2
+  [*] --> Espera
+  Espera --> tria : when(dades llestes)
+  state tria <<choice>>
+  tria --> Processant : [vàlid]
+  tria --> Error : [else]
+  Processant --> [*] : after(2s)
+  Error --> Espera : reintentar
+```
+
+> 💡 **Llegenda:** ● inicial → estat per defecte · ◇ **pseudoestat de tria** (guardes `[...]`) · ◉ estat final. Disparadors: `when(...)` (canvi), `after(...)` (temps), o un esdeveniment de senyal/crida.
 
 ### Estats compostos i de submàquina
 
@@ -397,6 +445,24 @@ Posa èmfasi en els missatges i en la **seqüència temporal**; una dimensió (n
 - **Portal (*gate*)**: punt del contorn del fragment d'on surt/entra un missatge cap a/de fora.
 - **Nom**: `nom_operació_o_senyal (arg1, ...)` (cada argument amb `nom_paràmetre=` opcional; `-` = indefinit). De resposta: `atribut = nom_operació(args) : valor_de_retorn`.
 - Fletxa **horitzontal** = transmissió instantània; **descendent** = durada no negligible. Poden tenir restriccions temporals.
+
+```mermaid
+sequenceDiagram
+  participant self as :Context
+  participant o1 as o1:Cl1
+  participant o4 as o4:Cl4
+  self->>o1: miss1
+  alt x major que 0
+    loop 1..3
+      o1->>o4: op4(x)
+      o4-->>o1: w
+    end
+  else
+    o1->>o1: ref Interaccio2
+  end
+```
+
+> 💡 **Tipus de fletxa:** `▶` plena = missatge **síncron** (l'emissor s'atura fins la resposta) · `→` oberta = **asíncron** · `⇢` discontínua = **resposta**. Els fragments `alt` (alternativa), `loop` (bucle), `par` (paral·lel) i `ref` (ús d'interacció) agrupen missatges.
 
 ---
 

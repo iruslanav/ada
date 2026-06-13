@@ -113,6 +113,21 @@ S'usen **estàndards a nivell de projecte: guies d'estil** (del projecte o de l'
 
 **Màquina reutilitzable `IntroduccioDades`:** estats `incompletes` (entry / desactivar "Confirmar") i `completes` (entry / activar "Confirmar"); transició `when(posades totes les dades obligatòries)` i de tornada `when(esborrades dades obligatòries)`; `clic "Cancel·lar"` surt, `clic "Confirmar"` acaba.
 
+```mermaid
+stateDiagram-v2
+  [*] --> incompletes
+  incompletes : incompletes
+  incompletes : entry / desactivar Confirmar
+  completes : completes
+  completes : entry / activar Confirmar
+  incompletes --> completes : when(totes les dades)
+  completes --> incompletes : when(esborrades dades)
+  completes --> [*] : clic Confirmar
+  incompletes --> [*] : clic Cancel·lar
+```
+
+> 🎯 **Idea del tema:** cada **cd'ú** té UNA màquina d'estats. Finestres **primàries** → estat compost/de submàquina; **secundàries** (missatges) → estat simple. Les transicions les disparen els **esdeveniments de l'usuari** i porten les **accions** (classe + mètode).
+
 ## 4. Disseny de les classes de frontera
 
 - Especifica l'**aspecte gràfic** de les finestres.

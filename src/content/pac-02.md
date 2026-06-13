@@ -40,6 +40,37 @@
 
 **Raonament:** els `«prerequisit»` modelen l'ordre del cicle de vida (proposar → assignar → entregar → tribunal → nota → consultar). L'`«extend»` captura el "si no està proposat, proposa'l ara".
 
+```mermaid
+flowchart LR
+  Prof["👤 Professor"]:::actor
+  Alu["👤 Alumne"]:::actor
+  Adm["👤 Administratiu"]:::actor
+  subgraph Aplicació TFG/TFM
+    U1(["01 ProposarTreball"])
+    U4(["04 AssignarTreball"])
+    U5(["05 ConsultarTreball"])
+    U6(["06 EntregarTreball"])
+    U7(["07 ConsultarNota"])
+    U8(["08 DefinirTribunal"])
+    U9(["09 IntroduirNota"])
+  end
+  Prof --- U1
+  Prof --- U4
+  Prof --- U5
+  Alu --- U6
+  Alu --- U7
+  Adm --- U8
+  Adm --- U9
+  U5 -. "«prerequisit»" .-> U1
+  U4 -. "«extend»" .-> U1
+  U4 -. "«prerequisit»" .-> U6
+  U6 -. "«prerequisit»" .-> U8
+  U8 -. "«prerequisit»" .-> U9
+  classDef actor fill:#ffffff,stroke:#8a1f2b,color:#8a1f2b,stroke-width:1px;
+```
+
+> 📌 `01 ProposarTreball` és **abstracte** i s'especialitza en `02 ProposarTreballGrau` i `03 ProposarTreballMaster`. El Professor és **actor secundari** d'`06 EntregarTreball` (accepta/refusa dins el mateix procés).
+
 ### b) Especificació textual — 06. EntregarTreball
 
 - **Resum:** l'alumne entrega un treball assignat i el professor l'accepta o no.
@@ -77,6 +108,52 @@
 
 **Nota de disseny:** la nota va a `Entrega` i no a una associació amb el tribunal, perquè la nota és **comuna** al tribunal (una sola).
 
+```mermaid
+classDiagram
+  class Persona {
+    <<abstract>>
+    -String NIF
+    -String nom
+  }
+  class Professor {
+    -int despatx
+  }
+  class Alumne {
+    -int curs
+  }
+  class Treball {
+    <<abstract>>
+    -String codi
+    -String titol
+    -String descripcio
+  }
+  class TFG {
+    -Llenguatge lleng
+  }
+  class TFM
+  class Llenguatge {
+    <<enumeration>>
+    Java
+    Python
+  }
+  class Entrega {
+    -String URL
+    -float nota
+    -date diaHora
+  }
+  Persona <|-- Professor
+  Persona <|-- Alumne
+  Treball <|-- TFG
+  Treball <|-- TFM
+  Professor "1" -- "*" Treball : proposat
+  Treball "*" -- "0..1" Alumne : assignat
+  Professor "0..3" -- "*" Entrega : tribunal
+  TFG "0..1" -- "*" TFM : prerequisit
+  Entrega .. Treball
+```
+
+> 💡 Les dues jerarquies són `{complete, disjoint}`. `Entrega` és **classe associativa** sobre Treball–Alumne (hi guarda URL, nota i dia/hora). El **tribunal** = 0..3 professors lligats a l'Entrega.
+
 **Raonament:** es factoritza NIF/nom a `Persona` (`{complete, disjoint}`); `Treball` factoritza codi/títol/descripció; `Entrega` és classe associativa (URL, dia/hora, nota); l'autoassociació TFG↔TFM modela el prerequisit.
 
 ### d) Activitats / seqüències de l'entrega
@@ -84,6 +161,25 @@
 **Diagrama d'activitats** (carrils Professor | Alumne | sistema): inici → `DemanarNif` → `: NIFAlumne` → `IntroduirNIF` → `ConsultarTreballsAssignats` (llegeix `: Alumne {read}`) → `: LlistaTreballs` → `SeleccionarTreball` → `DemanarURL` → `: URLTreball` → `IntroduirURL` → `EnviarMissatge` → `: MissatgeEntrega` → **node de decisió**: `[accepta]` → `GuardarEntrega {create}` → `: Entrega` → fi; `[no accepta]` → `DemanarRao` → `IntroduirRao` → `EnviarMissatge` → `: MissatgeRao` → fi.
 
 **Diagrama de seqüències** (alternativa): ldv `:Alumne`, `:Professor`, `«control» :EntregaTreball` i objectes boundary/entity; fragment **`alt`** amb `[accepta]` (crea `«entity» :Entrega`) i `[no accepta]` (raó → missatge a l'Alumne).
+
+```mermaid
+sequenceDiagram
+  actor Al as Alumne
+  participant C as control :EntregaTreball
+  participant En as entity :Entrega
+  actor Pr as Professor
+  Al->>C: NIF
+  C->>C: getTreballsAssignats(NIF)
+  C-->>Al: títols
+  Al->>C: selecciona treball + URL
+  C->>Pr: missatge(URL)
+  alt accepta
+    C->>En: crea(dia, hora)
+  else no accepta
+    Pr->>C: raó
+    C-->>Al: missatge(raó)
+  end
+```
 
 ### e) Atributs referencials
 

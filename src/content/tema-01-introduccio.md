@@ -53,7 +53,19 @@
 
 A cada fase s'obté un resultat (document, codi) que és la base de la fase següent. Les fases, en "escala descendent", són:
 
-1. **Anàlisi prèvia** → *Especificació del sistema* → 2. **Anàlisi de requisits** → *Especificació de requisits* → 3. **Disseny** → *Especificació de disseny* → 4. **Programació** → *Software* → 5. **Prova** → 6. **Engegada** → 7. **Manteniment**
+```mermaid
+flowchart TD
+  A["Anàlisi prèvia"] -->|Especificació del sistema| B["Anàlisi de requisits"]
+  B -->|Especificació de requisits| C["Disseny"]
+  C -->|Especificació de disseny| D["Programació"]
+  D -->|Software| E["Prova"]
+  E --> F["Engegada"]
+  F --> G["Manteniment"]
+  classDef s fill:#f6e9ea,stroke:#8a1f2b,color:#3a1116;
+  class A,B,C,D,E,F,G s;
+```
+
+> ⚠️ **El problema:** en cascada **no hi ha marxa enrere** → els requisits han de ser complets des del principi i tot ha de ser correcte a la primera. **Solució:** *increments* (aplicar el cicle a fraccions del projecte) i *iteracions* (revisar-les i corregir-les).
 
 - **Anàlisi prèvia**: què ha de fer el software, estudi de viabilitat, costos, durada.
 - **Anàlisi de requisits**: detalla les funcions a realitzar (es distingeix *recollida* i *anàlisi* de requisits).

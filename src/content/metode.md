@@ -8,6 +8,44 @@ Es llegeix **de dalt a baix**. Els elements arrodonits són les **fases** (Requi
 
 Flux complet: **Requisits → Anàlisi → Disseny → Construcció → Prova.**
 
+```mermaid
+flowchart TD
+  R(["1 · Requisits"]):::phase
+  A(["2 · Anàlisi"]):::phase
+  D(["3 · Disseny"]):::phase
+  C(["4 · Construcció"]):::phase
+  P(["5 · Prova"]):::phase
+
+  RNF["Requisits no funcionals"]:::art
+  RF["Requisits funcionals (cd'ú)"]:::art
+  CE["Diag. classes d'entitat"]:::art
+  DCU["Diagrames dels cd'ú"]:::art
+  EO["Especif. operacions"]:::art
+  CP["Codi provisional"]:::art
+  CD["Codi definitiu"]:::artok
+
+  R --> RNF
+  R --> RF
+  RF --> A
+  A --> CE
+  A --> DCU
+  A --> EO
+  CE --> D
+  DCU --> D
+  EO --> D
+  RNF -. directe al disseny .-> D
+  D --> C
+  C --> CP
+  CP --> P
+  P --> CD
+
+  classDef phase fill:#8a1f2b,color:#ffffff,stroke:#6f1722,stroke-width:1px;
+  classDef art fill:#fbf4f4,stroke:#d8b9bc,color:#444444;
+  classDef artok fill:#eaf6ee,stroke:#2e9e57,color:#1c5a35;
+```
+
+> 🎯 **En un cop d'ull:** 5 fases en cadena; cada fase **consumeix** els artefactes («datastore») de l'anterior i en **produeix** de nous. El **Disseny** és el coll d'ampolla: rep 4 entrades (els 3 de l'Anàlisi + els requisits no funcionals).
+
 ## Fase 1 — Requisits
 
 Punt de partida. Genera **dos** artefactes:
