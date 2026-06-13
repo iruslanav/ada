@@ -1,0 +1,45 @@
+name: Build i desplega a adaLIVE
+
+# Compila la web React i publica el resultat (carpeta dist/) al repositori
+# `adaLIVE`, que es serveix amb GitHub Pages a https://iruslanav.github.io/adaLIVE/
+#
+# REQUISIT: cal afegir un secret anomenat ADALIVE_TOKEN al repositori `ada`
+# (Settings → Secrets and variables → Actions → New repository secret) amb un
+# Personal Access Token (classic) amb permís `repo`, o un fine-grained token amb
+# permís de "Contents: Read and write" sobre el repositori adaLIVE.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codi font
+        uses: actions/checkout@v4
+
+      - name: Configura Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instal·la dependències
+        run: npm ci
+
+      - name: Compila
+        run: npm run build
+        env:
+          VITE_BASE: /adaLIVE/
+
+      - name: Desplega a adaLIVE
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.ADALIVE_TOKEN }}
+          external_repository: iruslanav/adaLIVE
+          publish_branch: main
+          publish_dir: ./dist
+          force_orphan: true
+          commit_message: "Desplegament des d'ada@${{ github.sha }}"
