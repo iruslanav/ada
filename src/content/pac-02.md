@@ -11,7 +11,7 @@
 - **c)** Quines etapes es defineixen a la prova dinàmica?
 - **d)** Què és una configuració i de quins tipus n'hi ha?
 
-> *Nota: el document de solució només conté la solució de l'Exercici 2. Per a l'1, repassa els Temes III (no funcionals), VII (reenginyeria, configuracions) i VIII (prova dinàmica).*
+> 📌 *El PDF de solució oficial només resol l'Exercici 2. Les respostes de l'Exercici 1 (teoria) les trobaràs resoltes a sota, elaborades a partir dels materials del curs (Temes III, VII i VIII).*
 
 ### Exercici 2 (80%) — Aplicació de gestió de TFG/TFM
 
@@ -23,7 +23,48 @@
 
 ## Solució (explicada)
 
-### a) Diagrama de casos d'ús
+### Exercici 1 — Respostes teòriques
+
+> 💡 *Respostes elaborades a partir dels materials del curs (el PDF de solució oficial no les incloïa).*
+
+**a) Què són els requisits no funcionals? Dóna dos exemples.**
+
+Són les **característiques de l'aplicació exigides pel client** i les **restriccions imposades per l'entorn i la tecnologia**. A diferència dels funcionals (que diuen *què* ha de fer l'aplicació), els no funcionals diuen **com** ha de ser i **com** s'ha de construir. Es classifiquen en:
+
+- **del producte**: usabilitat, fiabilitat, portabilitat, seguretat, rendiment, eficiència, interoperabilitat, extensibilitat…
+- **del procés**: llenguatge de programació, gestor de BD, SO, reutilització de components…
+
+Se solen associar a **mètriques** per avaluar-ne el compliment. *Dos exemples:* (1) *seguretat* — "el programari ha de tenir control d'accés amb identificació de l'usuari"; (2) *procés/producte* — "el llenguatge de programació ha de ser Java" i "ha de funcionar sota Windows 7 i posteriors".
+
+**b) Què és la reenginyeria de codi? Quan és útil?**
+
+És **enginyeria inversa sobre el codi** (obtenir-ne un model), **modificació del model** generat i **regeneració del codi** a partir del model modificat. És **útil per a aplicacions ja existents que no tenen cap model documentat** (codi heretat/*legacy*) que cal entendre, millorar o adaptar. S'aplica sobretot en la fase de **manteniment**.
+
+> ⚠️ No confondre-la amb la **refactorització**, que millora l'estil i l'estructura del codi **sense alterar-ne el funcionament**.
+
+**c) Quines etapes es defineixen a la prova dinàmica?**
+
+En **ordre invers al desenvolupament**:
+
+1. **Unitària** — cada unitat de codi (classe, funció).
+2. **Integració** — conjunts d'unitats (*top-down* o *bottom-up*).
+3. **Validació** — tota l'aplicació contra els requisits **funcionals**.
+4. **Del sistema** — entorn HW/SO/xarxa, contra els requisits **no funcionals**.
+5. **D'acceptació (alfa test)** — el client, amb les seves dades.
+6. **Beta test** — diversos clients heterogenis (mercat).
+7. **De regressió** — després del manteniment.
+
+**d) Què és una configuració i de quins tipus n'hi ha?**
+
+Una **configuració** és el conjunt format pel **programa + documentació d'usuari + documentació de desenvolupament i manteniment**. Tipus:
+
+- **Línia base (*baseline*)**: configuració revisada i acceptada; base del desenvolupament futur (reproduïble, traçable, composició documentada).
+- **Versió**: línia base que incorpora canvis a una de prèvia. Casos especials: **variant** (mateixa funcionalitat per a un altre sistema) i **revisió** (substitueix l'anterior).
+- **Lliurament (*release*)**: versió que es lliura al client. Cas especial: **delta** (lliurament parcial; *forward* / *reverse*).
+
+---
+
+### Exercici 2 · a) Diagrama de casos d'ús
 
 **Actors:** `Professor`, `Alumne`, `Administratiu`. El Professor pot actuar com a administratiu (connexió `-secundari` cap a la zona administrativa).
 
